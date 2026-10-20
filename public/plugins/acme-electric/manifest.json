@@ -1,0 +1,7 @@
+{
+  "id": "acme-electric",
+  "name": "ACME Electric — Maniobra y protección",
+  "manufacturer": "ACME Electric",
+  "version": "1.0.0",
+  "parts": "parts.json"
+}

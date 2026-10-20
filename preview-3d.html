@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TEGSA CAE — Tablero 3D (interactivo)</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#eef1f4;
+    font-family:system-ui,Segoe UI,Roboto,sans-serif}
+  #c{display:block;width:100vw;height:100vh}
+  .title{position:fixed;top:16px;left:0;right:0;text-align:center;color:#1b2430;
+    font-size:20px;font-weight:700;pointer-events:none}
+  .subtitle{position:fixed;top:44px;left:0;right:0;text-align:center;color:#5b6676;
+    font-size:13px;pointer-events:none}
+  .legend{position:fixed;left:20px;top:84px;background:rgba(255,255,255,.92);
+    border:1px solid #d4d9e0;border-radius:10px;padding:11px 13px;font-size:13px;color:#1b2430;
+    box-shadow:0 6px 20px rgba(20,30,45,.12)}
+  .legend h4{margin:0 0 7px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#5b6676}
+  .legend .row{display:flex;align-items:center;gap:8px;margin:4px 0}
+  .legend .sw{width:15px;height:15px;border-radius:3px;border:1px solid rgba(0,0,0,.15)}
+  .hint{position:fixed;left:0;right:0;bottom:16px;text-align:center;color:#8a93a0;font-size:12px;pointer-events:none}
+  .err{position:fixed;inset:0;display:none;place-items:center;padding:24px;text-align:center;color:#b00}
+  @media (prefers-color-scheme:dark){
+    html,body{background:#0f141b}.title{color:#e6ebf1}.subtitle,.hint{color:#9aa6b4}
+    .legend{background:rgba(22,28,37,.92);border-color:#2a333f;color:#e6ebf1}
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">TEGSA CAE — Tablero 3D</div>
+<div class="subtitle">Arrastrá para girar · rueda para zoom · botón derecho para desplazar</div>
+<div class="legend">
+  <h4>Referencias</h4>
+  <div class="row"><span class="sw" style="background:#d8dde3"></span>Placa / envolvente</div>
+  <div class="row"><span class="sw" style="background:#b9c0c8"></span>Riel DIN (35 mm)</div>
+  <div class="row"><span class="sw" style="background:#e9ebee"></span>Canaleta ranurada</div>
+  <div class="row"><span class="sw" style="background:#272b31"></span>Interruptor / guardamotor</div>
+  <div class="row"><span class="sw" style="background:#3a3f47"></span>Contactor</div>
+  <div class="row"><span class="sw" style="background:#2d6cdf"></span>PLC / módulo E/S</div>
+  <div class="row"><span class="sw" style="background:#cfd4da"></span>Bornera</div>
+</div>
+<div class="hint">Vista de referencia (fase F3) — no a escala</div>
+<div class="err" id="err">No se pudo cargar la librería 3D.<br>Esta vista interactiva necesita conexión a internet la primera vez.<br>La imagen PNG funciona sin conexión.</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+}}
+</script>
+<script type="module">
+let THREE, OrbitControls;
+try {
+  THREE = await import("three");
+  ({ OrbitControls } = await import("three/addons/controls/OrbitControls.js"));
+} catch (e) {
+  document.getElementById("err").style.display = "grid";
+  throw e;
+}
+
+const canvas = document.getElementById("c");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(matchMedia("(prefers-color-scheme: dark)").matches ? 0x0f141b : 0xeef1f4);
+
+const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 2000);
+camera.position.set(42, 26, 150);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 1, 4);
+controls.enableDamping = true;
+controls.minDistance = 60;
+controls.maxDistance = 320;
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+const key = new THREE.DirectionalLight(0xffffff, 1.05);
+key.position.set(60, 90, 80); key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+key.shadow.camera.near = 10; key.shadow.camera.far = 400;
+key.shadow.camera.left = -80; key.shadow.camera.right = 80;
+key.shadow.camera.top = 80; key.shadow.camera.bottom = -80;
+scene.add(key);
+const fill = new THREE.DirectionalLight(0xdfe8ff, 0.35);
+fill.position.set(-70, 30, 40); scene.add(fill);
+
+function box(x, y, z, w, h, d, color, opts = {}) {
+  const m = new THREE.Mesh(
+    new THREE.BoxGeometry(w, h, d),
+    new THREE.MeshStandardMaterial({ color, roughness: opts.rough ?? 0.6, metalness: opts.metal ?? 0.1 })
+  );
+  m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; scene.add(m); return m;
+}
+
+const PW = 60, PH = 80;
+box(0, 0, 0, PW, PH, 1.2, 0xd8dde3, { rough: 0.85, metal: 0.05 });
+const wall = 0x343a42, depth = 15, t = 1.6;
+box(-PW/2 - t/2, 0, -depth/2 + 0.5, t, PH + t*2, depth, wall, { rough: 0.5, metal: 0.3 });
+box( PW/2 + t/2, 0, -depth/2 + 0.5, t, PH + t*2, depth, wall, { rough: 0.5, metal: 0.3 });
+box(0,  PH/2 + t/2, -depth/2 + 0.5, PW + t*2, t, depth, wall, { rough: 0.5, metal: 0.3 });
+box(0, -PH/2 - t/2, -depth/2 + 0.5, PW + t*2, t, depth, wall, { rough: 0.5, metal: 0.3 });
+
+const railZ = 2.2, railH = 3.5, rows = [24, -6];
+for (const ry of rows) box(0, ry, railZ, 52, railH, 1.6, 0xb9c0c8, { rough: 0.35, metal: 0.6 });
+
+const ductC = 0xe9ebee, ductZ = 3.0;
+box(-27, 2, ductZ, 4.5, 74, 4.5, ductC, { rough: 0.8 });
+box( 27, 2, ductZ, 4.5, 74, 4.5, ductC, { rough: 0.8 });
+box(0,  39, ductZ, 50, 4.5, 4.5, ductC, { rough: 0.8 });
+box(0,   9, ductZ, 50, 4.5, 4.5, ductC, { rough: 0.8 });
+
+const railFront = railZ + 0.8;
+function mount(x, rowY, w, h, d, color, opts) {
+  box(x, rowY + railH/2 + h/2 - 0.3, railFront + d/2, w, h, d, color, opts);
+}
+mount(-19, 24, 9, 12, 8, 0x272b31, { rough: 0.5 });
+mount(-7, 24, 6.5, 10, 7, 0x3a3f47, { rough: 0.5 });
+mount(2.5, 24, 6.5, 10, 7, 0x3a3f47, { rough: 0.5 });
+mount(16, 24, 15, 10, 5.5, 0x2d6cdf, { rough: 0.4 });
+mount(-19, -6, 5.5, 9, 6.5, 0x272b31, { rough: 0.5 });
+mount(-11, -6, 5.5, 9, 6.5, 0x3a3f47, { rough: 0.5 });
+mount(-3, -6, 5.5, 9, 6.5, 0x3a3f47, { rough: 0.5 });
+for (let i = 0; i < 12; i++) mount(6 + i*1.6, -6, 1.3, 7, 4.5, 0xcfd4da, { rough: 0.7 });
+
+function resize() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+addEventListener("resize", resize); resize();
+
+(function loop() {
+  requestAnimationFrame(loop);
+  controls.update();
+  renderer.render(scene, camera);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+/* ------------------------------------------------------------------ *
+ * Design system (capa del diseñador gráfico). Tokens primero; los
+ * componentes sólo consumen variables. Tema claro/oscuro por tokens.
+ * ------------------------------------------------------------------ */
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --surface-2: #eceef1;
+  --ink: #1b2430;
+  --ink-soft: #5b6676;
+  --line: #d4d9e0;
+  --accent: #1f6feb;        /* azul TEGSA */
+  --accent-soft: #e7f1fb;
+  --grid: #e3e7ec;
+  --wire: #1b2430;
+  --symbol: #1b2430;
+  --pin: #1f6feb;
+  --danger: #c0392b;
+  --radius: 8px;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f141b;
+    --surface: #161c25;
+    --surface-2: #1d2531;
+    --ink: #e6ebf1;
+    --ink-soft: #9aa6b4;
+    --line: #2a333f;
+    --accent: #4d9bff;
+    --accent-soft: #15283f;
+    --grid: #1c242f;
+    --wire: #cbd4df;
+    --symbol: #cbd4df;
+    --pin: #4d9bff;
+  }
+}
+
+* { box-sizing: border-box; }
+html, body, #app { height: 100%; margin: 0; }
+body { font-family: var(--sans); color: var(--ink); background: var(--bg); }
+
+.app { display: flex; flex-direction: column; height: 100%; }
+
+/* ---- toolbar */
+.toolbar {
+  display: flex; align-items: center; gap: 16px;
+  padding: 8px 12px; background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.brand { font-weight: 700; letter-spacing: .5px; }
+.brand span { color: var(--accent); }
+.toolbar .group { display: flex; gap: 6px; }
+.meta { margin-left: auto; color: var(--ink-soft); font-size: 13px; }
+
+.btn {
+  font: inherit; font-size: 13px; padding: 6px 12px;
+  background: var(--surface-2); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  cursor: pointer;
+}
+.btn:hover { border-color: var(--accent); }
+.btn.tool.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+
+/* ---- layout body */
+.body { flex: 1; display: grid; grid-template-columns: 240px 1fr 260px; min-height: 0; }
+.sidebar { background: var(--surface); overflow: auto; padding: 12px; }
+.sidebar.left { border-right: 1px solid var(--line); }
+.sidebar.right { border-left: 1px solid var(--line); }
+.sidebar h3 { margin: 0 0 10px; font-size: 12px; text-transform: uppercase; letter-spacing: .6px; color: var(--ink-soft); }
+.muted { color: var(--ink-soft); font-size: 13px; }
+
+.stage { position: relative; display: flex; flex-direction: column; min-height: 0; background: var(--bg); }
+.canvas { width: 100%; height: 100%; }
+
+/* ---- pestañas Esquema / Tablero 3D */
+.tabs { display: flex; gap: 2px; padding: 6px 8px 0; background: var(--surface); border-bottom: 1px solid var(--line); }
+.tab-btn {
+  font: inherit; font-size: 13px; padding: 7px 16px; cursor: pointer;
+  background: transparent; color: var(--ink-soft);
+  border: 1px solid transparent; border-bottom: none;
+  border-radius: 8px 8px 0 0;
+}
+.tab-btn:hover { color: var(--ink); }
+.tab-btn.active {
+  background: var(--bg); color: var(--accent); font-weight: 600;
+  border-color: var(--line);
+}
+.panes { flex: 1; position: relative; min-height: 0; }
+.pane { position: absolute; inset: 0; display: none; }
+.pane.active { display: block; }
+
+/* ---- panel 3D */
+.t3d-wrap { display: flex; flex-direction: column; height: 100%; }
+.t3d-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.t3d-hint { color: var(--ink-soft); font-size: 12px; margin-left: auto; }
+.t3d-canvas { flex: 1; width: 100%; height: 100%; display: block; }
+
+/* ---- paleta */
+.palette-group h4 { margin: 14px 0 6px; font-size: 13px; }
+.palette-item {
+  display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 8px;
+  width: 100%; text-align: left; margin-bottom: 4px;
+  padding: 6px; background: var(--surface-2);
+  border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer;
+}
+.palette-item:hover { border-color: var(--accent); }
+.palette-item .thumb { width: 34px; height: 34px; grid-row: span 2; color: var(--symbol); }
+.palette-code { font-family: var(--mono); font-size: 12px; font-weight: 600; }
+.palette-family { font-size: 11px; color: var(--ink-soft); }
+
+/* ---- inspector */
+#inspector h4 { margin: 0 0 2px; font-family: var(--mono); }
+.attrs { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+.attrs td { padding: 3px 4px; border-bottom: 1px solid var(--line); }
+.attrs td:first-child { color: var(--ink-soft); }
+.price { margin-top: 10px; font-size: 13px; font-weight: 600; }
+
+/* ---- statusbar */
+.statusbar {
+  padding: 5px 12px; background: var(--surface);
+  border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-soft);
+}
+
+/* ---- lienzo SVG */
+.schematic { display: block; width: 100%; height: 100%; background: var(--surface); }
+.schematic .grid line { stroke: var(--grid); stroke-width: 1; }
+.schematic .wire { fill: none; stroke: var(--wire); stroke-width: 2; }
+.schematic .wire.preview { stroke-dasharray: 5 4; opacity: .6; }
+.schematic .device { cursor: grab; color: var(--symbol); }
+.schematic .device.selected { cursor: grabbing; }
+.schematic .symbol-body { /* el color lo aporta .device (currentColor); cada forma trae su stroke/fill */ }
+.schematic .pin { fill: var(--pin); stroke: none; }
+.schematic .rds { fill: var(--ink); font: 600 11px var(--mono); }
+.schematic .sel-box { fill: none; stroke: var(--accent); stroke-dasharray: 4 3; }

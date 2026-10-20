@@ -1,0 +1,108 @@
+{
+  "symbols": {
+    "contact_no": {
+      "width": 24, "height": 48,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"12\" y1=\"0\" x2=\"12\" y2=\"18\"/><line x1=\"12\" y1=\"30\" x2=\"12\" y2=\"48\"/><line x1=\"12\" y1=\"30\" x2=\"25\" y2=\"14\"/></g>",
+      "pins": [{"id":"1","name":"1","x":12,"y":0},{"id":"2","name":"2","x":12,"y":48}]
+    },
+    "contact_nc": {
+      "width": 24, "height": 48,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"12\" y1=\"0\" x2=\"12\" y2=\"18\"/><line x1=\"12\" y1=\"30\" x2=\"12\" y2=\"48\"/><line x1=\"12\" y1=\"30\" x2=\"24\" y2=\"16\"/><line x1=\"24\" y1=\"10\" x2=\"24\" y2=\"22\"/></g>",
+      "pins": [{"id":"1","name":"1","x":12,"y":0},{"id":"2","name":"2","x":12,"y":48}]
+    },
+    "coil": {
+      "width": 40, "height": 48,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"20\" y1=\"0\" x2=\"20\" y2=\"14\"/><line x1=\"20\" y1=\"34\" x2=\"20\" y2=\"48\"/><rect x=\"6\" y=\"14\" width=\"28\" height=\"20\"/></g>",
+      "pins": [{"id":"A1","name":"A1","x":20,"y":0},{"id":"A2","name":"A2","x":20,"y":48}]
+    },
+    "pb_no": {
+      "width": 28, "height": 48,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"12\" y1=\"0\" x2=\"12\" y2=\"20\"/><line x1=\"12\" y1=\"32\" x2=\"12\" y2=\"48\"/><line x1=\"12\" y1=\"32\" x2=\"23\" y2=\"19\"/><line x1=\"18\" y1=\"19\" x2=\"18\" y2=\"8\"/><line x1=\"11\" y1=\"8\" x2=\"25\" y2=\"8\"/></g>",
+      "pins": [{"id":"13","name":"13","x":12,"y":0},{"id":"14","name":"14","x":12,"y":48}]
+    },
+    "pb_nc": {
+      "width": 28, "height": 48,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"12\" y1=\"0\" x2=\"12\" y2=\"20\"/><line x1=\"12\" y1=\"32\" x2=\"12\" y2=\"48\"/><line x1=\"12\" y1=\"32\" x2=\"23\" y2=\"19\"/><line x1=\"23\" y1=\"13\" x2=\"23\" y2=\"25\"/><line x1=\"18\" y1=\"19\" x2=\"18\" y2=\"8\"/><line x1=\"11\" y1=\"8\" x2=\"25\" y2=\"8\"/></g>",
+      "pins": [{"id":"11","name":"11","x":12,"y":0},{"id":"12","name":"12","x":12,"y":48}]
+    },
+    "lamp": {
+      "width": 32, "height": 32,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><circle cx=\"16\" cy=\"16\" r=\"10\"/><line x1=\"9\" y1=\"9\" x2=\"23\" y2=\"23\"/><line x1=\"23\" y1=\"9\" x2=\"9\" y2=\"23\"/><line x1=\"16\" y1=\"0\" x2=\"16\" y2=\"6\"/><line x1=\"16\" y1=\"26\" x2=\"16\" y2=\"32\"/></g>",
+      "pins": [{"id":"X1","name":"X1","x":16,"y":0},{"id":"X2","name":"X2","x":16,"y":32}]
+    },
+    "limit_no": {
+      "width": 30, "height": 48,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"12\" y1=\"0\" x2=\"12\" y2=\"20\"/><line x1=\"12\" y1=\"32\" x2=\"12\" y2=\"48\"/><line x1=\"12\" y1=\"32\" x2=\"23\" y2=\"19\"/><line x1=\"23\" y1=\"19\" x2=\"29\" y2=\"11\"/></g>",
+      "pins": [{"id":"13","name":"13","x":12,"y":0},{"id":"14","name":"14","x":12,"y":48}]
+    },
+    "selector": {
+      "width": 30, "height": 48,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"12\" y1=\"0\" x2=\"12\" y2=\"20\"/><line x1=\"12\" y1=\"32\" x2=\"12\" y2=\"48\"/><line x1=\"12\" y1=\"32\" x2=\"23\" y2=\"19\"/><line x1=\"7\" y1=\"6\" x2=\"19\" y2=\"6\"/><line x1=\"13\" y1=\"6\" x2=\"13\" y2=\"19\" stroke-dasharray=\"2 2\"/></g>",
+      "pins": [{"id":"1","name":"1","x":12,"y":0},{"id":"2","name":"2","x":12,"y":48}]
+    },
+    "fuse": {
+      "width": 24, "height": 48,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"12\" y1=\"0\" x2=\"12\" y2=\"10\"/><rect x=\"6\" y=\"10\" width=\"12\" height=\"28\"/><line x1=\"12\" y1=\"10\" x2=\"12\" y2=\"38\"/><line x1=\"12\" y1=\"38\" x2=\"12\" y2=\"48\"/></g>",
+      "pins": [{"id":"1","name":"1","x":12,"y":0},{"id":"2","name":"2","x":12,"y":48}]
+    },
+    "ground": {
+      "width": 28, "height": 28,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"14\" y1=\"0\" x2=\"14\" y2=\"12\"/><line x1=\"4\" y1=\"12\" x2=\"24\" y2=\"12\"/><line x1=\"8\" y1=\"17\" x2=\"20\" y2=\"17\"/><line x1=\"11\" y1=\"22\" x2=\"17\" y2=\"22\"/></g>",
+      "pins": [{"id":"PE","name":"PE","x":14,"y":0}]
+    },
+    "terminal": {
+      "width": 20, "height": 20,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"10\" y1=\"0\" x2=\"10\" y2=\"6\"/><circle cx=\"10\" cy=\"10\" r=\"4\"/><line x1=\"10\" y1=\"14\" x2=\"10\" y2=\"20\"/></g>",
+      "pins": [{"id":"t","name":"sup","x":10,"y":0},{"id":"b","name":"inf","x":10,"y":20}]
+    },
+    "breaker3p": {
+      "width": 40, "height": 60,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"8\" y1=\"0\" x2=\"8\" y2=\"20\"/><line x1=\"8\" y1=\"40\" x2=\"8\" y2=\"60\"/><line x1=\"8\" y1=\"40\" x2=\"17\" y2=\"26\"/><path d=\"M5 12 l6 6 M11 12 l-6 6\"/><line x1=\"20\" y1=\"0\" x2=\"20\" y2=\"20\"/><line x1=\"20\" y1=\"40\" x2=\"20\" y2=\"60\"/><line x1=\"20\" y1=\"40\" x2=\"29\" y2=\"26\"/><path d=\"M17 12 l6 6 M23 12 l-6 6\"/><line x1=\"32\" y1=\"0\" x2=\"32\" y2=\"20\"/><line x1=\"32\" y1=\"40\" x2=\"32\" y2=\"60\"/><line x1=\"32\" y1=\"40\" x2=\"41\" y2=\"26\"/><path d=\"M29 12 l6 6 M35 12 l-6 6\"/><line x1=\"17\" y1=\"33\" x2=\"35\" y2=\"33\" stroke-dasharray=\"3 2\" stroke-width=\"1\"/></g>",
+      "pins": [{"id":"1","name":"1","x":8,"y":0},{"id":"3","name":"3","x":20,"y":0},{"id":"5","name":"5","x":32,"y":0},{"id":"2","name":"2","x":8,"y":60},{"id":"4","name":"4","x":20,"y":60},{"id":"6","name":"6","x":32,"y":60}]
+    },
+    "disconnector3p": {
+      "width": 40, "height": 60,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><circle cx=\"8\" cy=\"22\" r=\"2\"/><line x1=\"8\" y1=\"0\" x2=\"8\" y2=\"20\"/><line x1=\"8\" y1=\"40\" x2=\"8\" y2=\"60\"/><line x1=\"8\" y1=\"40\" x2=\"17\" y2=\"24\"/><circle cx=\"20\" cy=\"22\" r=\"2\"/><line x1=\"20\" y1=\"0\" x2=\"20\" y2=\"20\"/><line x1=\"20\" y1=\"40\" x2=\"20\" y2=\"60\"/><line x1=\"20\" y1=\"40\" x2=\"29\" y2=\"24\"/><circle cx=\"32\" cy=\"22\" r=\"2\"/><line x1=\"32\" y1=\"0\" x2=\"32\" y2=\"20\"/><line x1=\"32\" y1=\"40\" x2=\"32\" y2=\"60\"/><line x1=\"32\" y1=\"40\" x2=\"41\" y2=\"24\"/><line x1=\"17\" y1=\"33\" x2=\"35\" y2=\"33\" stroke-dasharray=\"3 2\" stroke-width=\"1\"/></g>",
+      "pins": [{"id":"1","name":"1","x":8,"y":0},{"id":"3","name":"3","x":20,"y":0},{"id":"5","name":"5","x":32,"y":0},{"id":"2","name":"2","x":8,"y":60},{"id":"4","name":"4","x":20,"y":60},{"id":"6","name":"6","x":32,"y":60}]
+    },
+    "contactor3p": {
+      "width": 40, "height": 60,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"8\" y1=\"0\" x2=\"8\" y2=\"22\"/><line x1=\"8\" y1=\"38\" x2=\"8\" y2=\"60\"/><line x1=\"8\" y1=\"22\" x2=\"15\" y2=\"37\"/><line x1=\"20\" y1=\"0\" x2=\"20\" y2=\"22\"/><line x1=\"20\" y1=\"38\" x2=\"20\" y2=\"60\"/><line x1=\"20\" y1=\"22\" x2=\"27\" y2=\"37\"/><line x1=\"32\" y1=\"0\" x2=\"32\" y2=\"22\"/><line x1=\"32\" y1=\"38\" x2=\"32\" y2=\"60\"/><line x1=\"32\" y1=\"22\" x2=\"39\" y2=\"37\"/><line x1=\"15\" y1=\"30\" x2=\"39\" y2=\"30\" stroke-width=\"1\" stroke-dasharray=\"3 2\"/></g>",
+      "pins": [{"id":"1","name":"1","x":8,"y":0},{"id":"3","name":"3","x":20,"y":0},{"id":"5","name":"5","x":32,"y":0},{"id":"2","name":"2","x":8,"y":60},{"id":"4","name":"4","x":20,"y":60},{"id":"6","name":"6","x":32,"y":60}]
+    },
+    "thermal3p": {
+      "width": 40, "height": 60,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"8\" y1=\"0\" x2=\"8\" y2=\"16\"/><rect x=\"4\" y=\"16\" width=\"8\" height=\"28\"/><line x1=\"8\" y1=\"44\" x2=\"8\" y2=\"60\"/><line x1=\"20\" y1=\"0\" x2=\"20\" y2=\"16\"/><rect x=\"16\" y=\"16\" width=\"8\" height=\"28\"/><line x1=\"20\" y1=\"44\" x2=\"20\" y2=\"60\"/><line x1=\"32\" y1=\"0\" x2=\"32\" y2=\"16\"/><rect x=\"28\" y=\"16\" width=\"8\" height=\"28\"/><line x1=\"32\" y1=\"44\" x2=\"32\" y2=\"60\"/><line x1=\"8\" y1=\"50\" x2=\"32\" y2=\"50\" stroke-dasharray=\"3 2\" stroke-width=\"1\"/></g>",
+      "pins": [{"id":"1","name":"1","x":8,"y":0},{"id":"3","name":"3","x":20,"y":0},{"id":"5","name":"5","x":32,"y":0},{"id":"2","name":"2","x":8,"y":60},{"id":"4","name":"4","x":20,"y":60},{"id":"6","name":"6","x":32,"y":60}]
+    },
+    "motor3": {
+      "width": 40, "height": 44,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><line x1=\"8\" y1=\"0\" x2=\"8\" y2=\"11\"/><line x1=\"20\" y1=\"0\" x2=\"20\" y2=\"11\"/><line x1=\"32\" y1=\"0\" x2=\"32\" y2=\"11\"/><circle cx=\"20\" cy=\"26\" r=\"15\"/></g><text x=\"20\" y=\"30\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"13\" font-family=\"monospace\">M</text><text x=\"20\" y=\"40\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"7\" font-family=\"monospace\">3~</text>",
+      "pins": [{"id":"U","name":"U","x":8,"y":0},{"id":"V","name":"V","x":20,"y":0},{"id":"W","name":"W","x":32,"y":0}]
+    },
+    "transformer": {
+      "width": 40, "height": 56,
+      "svg": "<g stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\"><circle cx=\"20\" cy=\"18\" r=\"10\"/><circle cx=\"20\" cy=\"38\" r=\"10\"/><line x1=\"14\" y1=\"0\" x2=\"14\" y2=\"9\"/><line x1=\"26\" y1=\"0\" x2=\"26\" y2=\"9\"/><line x1=\"14\" y1=\"56\" x2=\"14\" y2=\"47\"/><line x1=\"26\" y1=\"56\" x2=\"26\" y2=\"47\"/></g>",
+      "pins": [{"id":"U1","name":"U1","x":14,"y":0},{"id":"U2","name":"U2","x":26,"y":0},{"id":"u1","name":"u1","x":14,"y":56},{"id":"u2","name":"u2","x":26,"y":56}]
+    }
+  },
+  "parts": [
+    { "code": "CB-3P", "family": "Interruptor", "symbol": "breaker3p", "attributes": { "Descripción": "Interruptor automático 3P", "Norma": "IEC 60947-2" } },
+    { "code": "SECC-3P", "family": "Seccionador", "symbol": "disconnector3p", "attributes": { "Descripción": "Seccionador 3P", "Norma": "IEC 60947-3" } },
+    { "code": "FUS", "family": "Fusible", "symbol": "fuse", "attributes": { "Descripción": "Fusible", "Norma": "IEC 60269" } },
+    { "code": "KM-3P", "family": "Contactor", "symbol": "contactor3p", "attributes": { "Descripción": "Contactor de potencia 3P", "Norma": "IEC 60947-4-1" } },
+    { "code": "F-TERM", "family": "Relé térmico", "symbol": "thermal3p", "attributes": { "Descripción": "Relé térmico de sobrecarga", "Norma": "IEC 60947-4-1" } },
+    { "code": "M-3~", "family": "Motor", "symbol": "motor3", "attributes": { "Descripción": "Motor trifásico asíncrono" } },
+    { "code": "TRAFO", "family": "Transformador", "symbol": "transformer", "attributes": { "Descripción": "Transformador de dos devanados" } },
+    { "code": "CTO-NA", "family": "Contacto", "symbol": "contact_no", "attributes": { "Descripción": "Contacto normalmente abierto (NA)" } },
+    { "code": "CTO-NC", "family": "Contacto", "symbol": "contact_nc", "attributes": { "Descripción": "Contacto normalmente cerrado (NC)" } },
+    { "code": "BOB", "family": "Bobina", "symbol": "coil", "attributes": { "Descripción": "Bobina de contactor/relé", "Bornes": "A1-A2" } },
+    { "code": "PB-NA", "family": "Pulsador", "symbol": "pb_no", "attributes": { "Descripción": "Pulsador normalmente abierto (marcha)" } },
+    { "code": "PB-NC", "family": "Pulsador", "symbol": "pb_nc", "attributes": { "Descripción": "Pulsador normalmente cerrado (paro)" } },
+    { "code": "FC-NA", "family": "Final de carrera", "symbol": "limit_no", "attributes": { "Descripción": "Interruptor de posición NA" } },
+    { "code": "SEL", "family": "Selector", "symbol": "selector", "attributes": { "Descripción": "Selector de posiciones" } },
+    { "code": "LAMP", "family": "Señalización", "symbol": "lamp", "attributes": { "Descripción": "Lámpara de señalización" } },
+    { "code": "BORNE", "family": "Borne", "symbol": "terminal", "attributes": { "Descripción": "Borne de conexión" } },
+    { "code": "PE", "family": "Puesta a tierra", "symbol": "ground", "attributes": { "Descripción": "Puesta a tierra de protección" } }
+  ]
+}

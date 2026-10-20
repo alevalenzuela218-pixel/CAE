@@ -1,0 +1,7 @@
+{
+  "id": "iec-base",
+  "name": "Biblioteca IEC 60617 — Símbolos base",
+  "manufacturer": "IEC 60617",
+  "version": "1.0.0",
+  "parts": "parts.json"
+}

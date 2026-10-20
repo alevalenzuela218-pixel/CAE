@@ -1,0 +1,93 @@
+{
+  "symbols": {
+    "contactor": {
+      "file": "symbols/contactor.svg",
+      "width": 40,
+      "height": 60,
+      "pins": [
+        { "id": "1", "name": "1/L1", "x": 8, "y": 0 },
+        { "id": "3", "name": "3/L2", "x": 20, "y": 0 },
+        { "id": "5", "name": "5/L3", "x": 32, "y": 0 },
+        { "id": "2", "name": "2/T1", "x": 8, "y": 60 },
+        { "id": "4", "name": "4/T2", "x": 20, "y": 60 },
+        { "id": "6", "name": "6/T3", "x": 32, "y": 60 }
+      ]
+    },
+    "breaker": {
+      "file": "symbols/breaker.svg",
+      "width": 40,
+      "height": 60,
+      "pins": [
+        { "id": "1", "name": "1", "x": 8, "y": 0 },
+        { "id": "3", "name": "3", "x": 20, "y": 0 },
+        { "id": "5", "name": "5", "x": 32, "y": 0 },
+        { "id": "2", "name": "2", "x": 8, "y": 60 },
+        { "id": "4", "name": "4", "x": 20, "y": 60 },
+        { "id": "6", "name": "6", "x": 32, "y": 60 }
+      ]
+    },
+    "motor": {
+      "file": "symbols/motor.svg",
+      "width": 40,
+      "height": 44,
+      "pins": [
+        { "id": "U", "name": "U", "x": 8, "y": 0 },
+        { "id": "V", "name": "V", "x": 20, "y": 0 },
+        { "id": "W", "name": "W", "x": 32, "y": 0 }
+      ]
+    },
+    "terminal": {
+      "file": "symbols/terminal.svg",
+      "width": 20,
+      "height": 20,
+      "pins": [
+        { "id": "t", "name": "top", "x": 10, "y": 0 },
+        { "id": "b", "name": "bot", "x": 10, "y": 20 }
+      ]
+    }
+  },
+  "parts": [
+    {
+      "code": "LC1D09",
+      "family": "Contactor",
+      "symbol": "contactor",
+      "attributes": { "In": "9 A", "Ue": "690 V", "Polos": 3, "Bobina": "24 VDC", "AC3_kW": "4 kW" },
+      "price": 42.0
+    },
+    {
+      "code": "LC1D18",
+      "family": "Contactor",
+      "symbol": "contactor",
+      "attributes": { "In": "18 A", "Ue": "690 V", "Polos": 3, "Bobina": "24 VDC", "AC3_kW": "7.5 kW" },
+      "price": 55.0
+    },
+    {
+      "code": "GV2ME10",
+      "family": "Interruptor",
+      "symbol": "breaker",
+      "attributes": { "Tipo": "Guardamotor", "Rango": "4-6.3 A", "Polos": 3, "Icu": "100 kA" },
+      "price": 48.0
+    },
+    {
+      "code": "IC60N-C16",
+      "family": "Interruptor",
+      "symbol": "breaker",
+      "attributes": { "Tipo": "Termomagnético", "In": "16 A", "Curva": "C", "Polos": 1, "Icn": "6 kA" },
+      "price": 18.5
+    },
+    {
+      "code": "M-3K-4P",
+      "family": "Motor",
+      "symbol": "motor",
+      "attributes": { "P": "3 kW", "In": "6.6 A", "Polos": 4, "rpm": 1450, "Conexión": "Estrella-Triángulo" },
+      "price": 310.0
+    },
+    {
+      "code": "XB-2.5",
+      "family": "Borne",
+      "symbol": "terminal",
+      "attributes": { "Sección": "2.5 mm²", "Tipo": "Tornillo", "Color": "Gris" },
+      "price": 1.2
+    }
+  ]
+}

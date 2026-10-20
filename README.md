@@ -63,8 +63,8 @@ npm run tauri dev
 Generar el ejecutable / instalador:
 
 ```bash
-npm ci
-npm run tauri:build
+npm install
+npm run tauri build
 ```
 
 La primera compilación tarda varios minutos (compila Rust). Resultado en Windows:
@@ -100,16 +100,3 @@ docs/        especificación de plugins
 - Definir el esquema JSON del archivo de proyecto con validación.
 
 Ver `docs/PLUGIN-SPEC.md` para crear un plugin de fabricante.
-
-
-## Compilación automática del instalador
-
-Se agregó el workflow `.github/workflows/build-windows.yml`. Al subir el proyecto a
-GitHub, podés ejecutarlo desde **Actions → Build TEGSA CAE installer → Run workflow**.
-También se dispara al publicar un tag que comience con `v` (por ejemplo `v0.1.1`).
-Al finalizar, descargá el artefacto **TEGSA-CAE-Windows-Installer** desde la ejecución
-del workflow. El artefacto contiene el instalador NSIS para Windows.
-
-La compilación requiere dependencias nativas de Tauri y Rust; GitHub Actions las prepara
-en una máquina Windows limpia. Para compilar localmente, instalá los prerrequisitos
-de Tauri para Windows y ejecutá `npm ci` y `npm run tauri:build` dentro de `tegsa-cae`.

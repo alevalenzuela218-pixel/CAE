@@ -1,5 +1,5 @@
 
-name: Build Windows Installer
+name: Build TEGSA CAE installer
 
 on:
   workflow_dispatch:
@@ -11,10 +11,6 @@ jobs:
   build:
     runs-on: windows-latest
 
-    defaults:
-      run:
-        working-directory: tegsa-cae
-
     steps:
       - name: Descargar código
         uses: actions/checkout@v4
@@ -24,7 +20,6 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: tegsa-cae/package-lock.json
 
       - name: Instalar Rust
         uses: dtolnay/rust-toolchain@stable
@@ -42,5 +37,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: TEGSA-CAE-Windows-Installer
-          path: tegsa-cae/src-tauri/target/release/bundle/nsis/*-setup.exe
+          path: src-tauri/target/release/bundle/nsis/*-setup.exe
           if-no-files-found: error

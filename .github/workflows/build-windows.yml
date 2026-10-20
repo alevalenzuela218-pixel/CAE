@@ -1,0 +1,46 @@
+
+name: Build Windows Installer
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        working-directory: tegsa-cae
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tegsa-cae/package-lock.json
+
+      - name: Instalar Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Instalar NSIS
+        run: choco install nsis -y
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Compilar instalador
+        run: npm run tauri:build
+
+      - name: Publicar instalador
+        uses: actions/upload-artifact@v4
+        with:
+          name: TEGSA-CAE-Windows-Installer
+          path: tegsa-cae/src-tauri/target/release/bundle/nsis/*-setup.exe
+          if-no-files-found: error

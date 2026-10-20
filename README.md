@@ -21,8 +21,11 @@ editor sin instalar Rust.
   (interruptor/seccionador 3P, fusible, contactor, relé térmico, motor,
   transformador, contactos NA/NC, bobina, pulsadores, final de carrera,
   selector, lámpara, borne, tierra).
-- **Pestaña Tablero 3D**: vista del gabinete en WebGL (riel DIN, canaletas,
-  componentes) con órbita/zoom, y **carga de modelos 3D `.glb`** de fabricante.
+- **Pestaña Tablero 3D**: gabinetes **DI Metallo GM-E** generados en 3D de forma
+  paramétrica y seleccionables por medida (ancho 300–1200 / alto 1500–2100 /
+  prof. 300–1200 mm), con opciones Puerta, BM (bastidor de montaje) y CF (contra
+  frente), más **carga de modelos 3D `.glb`** de fabricante. Ver
+  `docs/CATALOGO-GM-E.md`.
 - Paleta de artículos poblada **desde plugins**; inspector con los atributos del
   artículo seleccionado.
 - Numeración RDS automática al colocar (IEC 81346: `-Q1`, `-K1`, `-S1`, `-F1`…).

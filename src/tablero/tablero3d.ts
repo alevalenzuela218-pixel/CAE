@@ -1,19 +1,19 @@
 /**
  * Módulo Tablero 3D.
  *
- * Renderiza la vista 3D del tablero (envolvente, riel DIN, canaletas y
- * componentes) sobre WebGL con Three.js, y permite CARGAR modelos 3D de
- * fabricante en formato glTF (.glb / .gltf) para montarlos en la escena.
+ * Muestra el gabinete seleccionado del catálogo DI Metallo GM-E, generado en
+ * 3D a partir de sus cotas (ancho/alto/profundidad) y opciones (puerta, BM, CF),
+ * sobre WebGL con Three.js. Permite además CARGAR modelos glTF (.glb/.gltf) de
+ * fabricante para montarlos dentro del gabinete.
  *
- * Alcance de esta etapa: la escena de referencia + carga de .glb. En F3 esto
- * se arma automáticamente a partir de los dispositivos del esquema, tomando la
- * geometría que cada plugin de fabricante aporta (glTF ahora, STEP convertido
- * más adelante) y sumando colisiones y cálculo térmico.
+ * En F3 el contenido del gabinete se arma automáticamente desde el esquema,
+ * sumando colisiones y cálculo térmico.
  */
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { EventBus, Events } from "../core/bus";
+import { buildGabineteGM, gmCode, gmRadius, GM_RANGES, type GabOpts } from "./gabineteGM";
 
 export class Tablero3D {
   private renderer: THREE.WebGLRenderer;
@@ -22,14 +22,17 @@ export class Tablero3D {
   private controls: OrbitControls;
   private canvas: HTMLCanvasElement;
   private host: HTMLElement;
+  private cabinet: THREE.Group | null = null;
   private loaded: THREE.Object3D[] = [];
   private raf = 0;
   private running = false;
   private ro?: ResizeObserver;
 
+  private opts: GabOpts = { A: 600, H: 1800, P: 500, door: false, bm: true, cf: false };
+
   constructor(container: HTMLElement, private bus: EventBus) {
     this.host = container;
-    this.host.innerHTML = TOOLBAR;
+    this.host.innerHTML = this.toolbar();
 
     this.canvas = this.host.querySelector("canvas")!;
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
@@ -41,95 +44,82 @@ export class Tablero3D {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(this.dark() ? 0x0f141b : 0xeef1f4);
 
-    this.camera = new THREE.PerspectiveCamera(32, 1, 0.1, 2000);
-    this.camera.position.set(42, 26, 150);
-
+    this.camera = new THREE.PerspectiveCamera(32, 1, 0.1, 4000);
     this.controls = new OrbitControls(this.camera, this.canvas);
-    this.controls.target.set(0, 1, 4);
     this.controls.enableDamping = true;
-    this.controls.minDistance = 50;
-    this.controls.maxDistance = 360;
 
     this.buildLights();
-    this.buildPanel();
     this.bindUI();
+    this.rebuild();
 
     this.ro = new ResizeObserver(() => this.resize());
     this.ro.observe(this.host);
   }
 
-  // ------------------------------------------------------------- escena base
+  // ------------------------------------------------------------- escena
 
   private buildLights(): void {
-    this.scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-    const key = new THREE.DirectionalLight(0xffffff, 1.05);
-    key.position.set(60, 90, 80);
+    this.scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    const key = new THREE.DirectionalLight(0xffffff, 1.0);
+    key.position.set(120, 200, 180);
     key.castShadow = true;
     key.shadow.mapSize.set(2048, 2048);
     key.shadow.camera.near = 10;
-    key.shadow.camera.far = 400;
-    key.shadow.camera.left = -80;
-    key.shadow.camera.right = 80;
-    key.shadow.camera.top = 80;
-    key.shadow.camera.bottom = -80;
+    key.shadow.camera.far = 900;
+    key.shadow.camera.left = -180;
+    key.shadow.camera.right = 180;
+    key.shadow.camera.top = 180;
+    key.shadow.camera.bottom = -180;
     this.scene.add(key);
     const fill = new THREE.DirectionalLight(0xdfe8ff, 0.35);
-    fill.position.set(-70, 30, 40);
+    fill.position.set(-140, 60, 80);
     this.scene.add(fill);
   }
 
-  private box(
-    x: number, y: number, z: number,
-    w: number, h: number, d: number,
-    color: number, opts: { rough?: number; metal?: number } = {},
-  ): THREE.Mesh {
-    const m = new THREE.Mesh(
-      new THREE.BoxGeometry(w, h, d),
-      new THREE.MeshStandardMaterial({
-        color, roughness: opts.rough ?? 0.6, metalness: opts.metal ?? 0.1,
-      }),
-    );
-    m.position.set(x, y, z);
-    m.castShadow = true;
-    m.receiveShadow = true;
-    this.scene.add(m);
-    return m;
+  /** Reconstruye el gabinete según la selección actual y reencuadra la cámara. */
+  private rebuild(): void {
+    if (this.cabinet) {
+      this.scene.remove(this.cabinet);
+      this.cabinet = null;
+    }
+    this.cabinet = buildGabineteGM(this.opts);
+    this.scene.add(this.cabinet);
+    this.fitCamera();
+
+    const code = gmCode(this.opts);
+    const el = this.host.querySelector("#gm-code");
+    if (el) el.textContent = `${code}  ·  ${this.opts.A} × ${this.opts.H} × ${this.opts.P} mm`;
+    this.status(`Gabinete ${code} (${this.opts.A}×${this.opts.H}×${this.opts.P} mm)`);
   }
 
-  private buildPanel(): void {
-    const PW = 60, PH = 80;
-    this.box(0, 0, 0, PW, PH, 1.2, 0xd8dde3, { rough: 0.85, metal: 0.05 });
-    const wall = 0x343a42, depth = 15, t = 1.6;
-    this.box(-PW / 2 - t / 2, 0, -depth / 2 + 0.5, t, PH + t * 2, depth, wall, { rough: 0.5, metal: 0.3 });
-    this.box(PW / 2 + t / 2, 0, -depth / 2 + 0.5, t, PH + t * 2, depth, wall, { rough: 0.5, metal: 0.3 });
-    this.box(0, PH / 2 + t / 2, -depth / 2 + 0.5, PW + t * 2, t, depth, wall, { rough: 0.5, metal: 0.3 });
-    this.box(0, -PH / 2 - t / 2, -depth / 2 + 0.5, PW + t * 2, t, depth, wall, { rough: 0.5, metal: 0.3 });
-
-    const railZ = 2.2, railH = 3.5, rows = [24, -6];
-    for (const ry of rows) this.box(0, ry, railZ, 52, railH, 1.6, 0xb9c0c8, { rough: 0.35, metal: 0.6 });
-
-    const ductC = 0xe9ebee, ductZ = 3.0;
-    this.box(-27, 2, ductZ, 4.5, 74, 4.5, ductC, { rough: 0.8 });
-    this.box(27, 2, ductZ, 4.5, 74, 4.5, ductC, { rough: 0.8 });
-    this.box(0, 39, ductZ, 50, 4.5, 4.5, ductC, { rough: 0.8 });
-    this.box(0, 9, ductZ, 50, 4.5, 4.5, ductC, { rough: 0.8 });
-
-    const railFront = railZ + 0.8;
-    const mount = (x: number, rowY: number, w: number, h: number, d: number, color: number, o: object) =>
-      this.box(x, rowY + railH / 2 + h / 2 - 0.3, railFront + d / 2, w, h, d, color, o);
-    mount(-19, 24, 9, 12, 8, 0x272b31, { rough: 0.5 });
-    mount(-7, 24, 6.5, 10, 7, 0x3a3f47, { rough: 0.5 });
-    mount(2.5, 24, 6.5, 10, 7, 0x3a3f47, { rough: 0.5 });
-    mount(16, 24, 15, 10, 5.5, 0x2d6cdf, { rough: 0.4 });
-    mount(-19, -6, 5.5, 9, 6.5, 0x272b31, { rough: 0.5 });
-    mount(-11, -6, 5.5, 9, 6.5, 0x3a3f47, { rough: 0.5 });
-    mount(-3, -6, 5.5, 9, 6.5, 0x3a3f47, { rough: 0.5 });
-    for (let i = 0; i < 12; i++) mount(6 + i * 1.6, -6, 1.3, 7, 4.5, 0xcfd4da, { rough: 0.7 });
+  private fitCamera(): void {
+    const r = gmRadius(this.opts);
+    const dist = r * 3.1;
+    this.camera.position.set(dist * 0.55, dist * 0.35, dist * 0.9);
+    this.controls.target.set(0, 0, 0);
+    this.controls.minDistance = r * 1.2;
+    this.controls.maxDistance = r * 8;
+    this.controls.update();
   }
 
-  // ----------------------------------------------------------- carga de .glb
+  // ----------------------------------------------------------- UI / eventos
 
   private bindUI(): void {
+    const selA = this.host.querySelector<HTMLSelectElement>("#gm-a")!;
+    const selH = this.host.querySelector<HTMLSelectElement>("#gm-h")!;
+    const selP = this.host.querySelector<HTMLSelectElement>("#gm-p")!;
+    selA.addEventListener("change", () => { this.opts.A = +selA.value; this.rebuild(); });
+    selH.addEventListener("change", () => { this.opts.H = +selH.value; this.rebuild(); });
+    selP.addEventListener("change", () => { this.opts.P = +selP.value; this.rebuild(); });
+
+    const bind = (id: string, key: "door" | "bm" | "cf") => {
+      const cb = this.host.querySelector<HTMLInputElement>(id)!;
+      cb.addEventListener("change", () => { this.opts[key] = cb.checked; this.rebuild(); });
+    };
+    bind("#gm-door", "door");
+    bind("#gm-bm", "bm");
+    bind("#gm-cf", "cf");
+
     const input = this.host.querySelector<HTMLInputElement>("#glb-input")!;
     this.host.querySelector("#glb-btn")!.addEventListener("click", () => input.click());
     input.addEventListener("change", async () => {
@@ -140,7 +130,7 @@ export class Tablero3D {
     this.host.querySelector("#glb-clear")!.addEventListener("click", () => this.clearLoaded());
   }
 
-  /** Carga un modelo glTF binario y lo centra/escala dentro de la escena. */
+  /** Carga un modelo glTF binario y lo monta dentro del gabinete. */
   async loadGLB(file: File): Promise<void> {
     this.status(`Cargando ${file.name}…`);
     try {
@@ -149,20 +139,16 @@ export class Tablero3D {
       const gltf = await loader.parseAsync(buf, "");
       const obj = gltf.scene;
 
-      // normalizar: centrar en origen y escalar a un tamaño visible (~30 u)
       const box = new THREE.Box3().setFromObject(obj);
       const size = box.getSize(new THREE.Vector3());
       const center = box.getCenter(new THREE.Vector3());
+      const target = gmRadius(this.opts) * 0.6;
       const maxDim = Math.max(size.x, size.y, size.z) || 1;
-      const scale = 30 / maxDim;
+      const scale = target / maxDim;
       obj.position.sub(center.multiplyScalar(scale));
       obj.scale.setScalar(scale);
-      obj.position.z += 20; // delante del tablero
       obj.traverse((n) => {
-        if ((n as THREE.Mesh).isMesh) {
-          n.castShadow = true;
-          n.receiveShadow = true;
-        }
+        if ((n as THREE.Mesh).isMesh) { n.castShadow = true; n.receiveShadow = true; }
       });
 
       this.scene.add(obj);
@@ -216,16 +202,40 @@ export class Tablero3D {
   private status(msg: string): void {
     this.bus.emit(Events.StatusMessage, msg);
   }
-}
 
-const TOOLBAR = `
-  <div class="t3d-wrap">
-    <div class="t3d-bar">
-      <button id="glb-btn" class="btn">Cargar modelo 3D (.glb)</button>
-      <button id="glb-clear" class="btn">Quitar importados</button>
-      <span class="t3d-hint">Arrastrá para girar · rueda para zoom · botón derecho para desplazar</span>
-      <input id="glb-input" type="file" accept=".glb,.gltf,model/gltf-binary" hidden />
-    </div>
-    <canvas class="t3d-canvas"></canvas>
-  </div>
-`;
+  // ---------------------------------------------------------------- markup
+
+  private options(vals: number[], sel: number): string {
+    return vals.map((v) => `<option value="${v}"${v === sel ? " selected" : ""}>${v}</option>`).join("");
+  }
+
+  private toolbar(): string {
+    return `
+      <div class="t3d-wrap">
+        <div class="t3d-bar">
+          <span class="t3d-brand">DI&nbsp;Metallo GM-E</span>
+          <label class="t3d-field">Ancho
+            <select id="gm-a">${this.options(GM_RANGES.A, this.opts.A)}</select>
+          </label>
+          <label class="t3d-field">Alto
+            <select id="gm-h">${this.options(GM_RANGES.H, this.opts.H)}</select>
+          </label>
+          <label class="t3d-field">Prof.
+            <select id="gm-p">${this.options(GM_RANGES.P, this.opts.P)}</select>
+          </label>
+          <label class="t3d-check"><input type="checkbox" id="gm-door"> Puerta</label>
+          <label class="t3d-check"><input type="checkbox" id="gm-bm" checked> BM</label>
+          <label class="t3d-check"><input type="checkbox" id="gm-cf"> CF</label>
+          <span id="gm-code" class="t3d-code"></span>
+        </div>
+        <div class="t3d-bar t3d-bar2">
+          <button id="glb-btn" class="btn">Cargar modelo 3D (.glb)</button>
+          <button id="glb-clear" class="btn">Quitar importados</button>
+          <span class="t3d-hint">Arrastrá para girar · rueda para zoom · botón derecho para desplazar</span>
+          <input id="glb-input" type="file" accept=".glb,.gltf,model/gltf-binary" hidden />
+        </div>
+        <canvas class="t3d-canvas"></canvas>
+      </div>
+    `;
+  }
+}
